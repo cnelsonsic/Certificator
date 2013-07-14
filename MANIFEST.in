@@ -1,0 +1,2 @@
+recursive-include certificator/static *
+recursive-include certificator/templates *

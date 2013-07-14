@@ -1,0 +1,6 @@
+language: python
+python:
+  - "2.7"
+  - "pypy"
+install: "./setup.py develop"
+script: "./setup.py nosetests"
