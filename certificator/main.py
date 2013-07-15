@@ -28,14 +28,15 @@ def create_app(config_filename=None):
 
     db.create_all()
 
-    # from .views import dashboard
-    # app.register_blueprint(dashboard)
+    from .views import root, quiz
+    app.register_blueprint(root)
+    app.register_blueprint(quiz)
 
     return app
 
 def main():
     app = create_app()
-    app.run()
+    app.run(port=5012, debug=True)
 
 if __name__ == '__main__':
     main()

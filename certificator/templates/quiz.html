@@ -1,0 +1,30 @@
+<h2>{{ quiz_name }}</h2>
+
+<form>
+{% for question in questions %}
+<fieldset>
+        <legend>
+            {{ question }}
+        </legend>
+    <p>
+        <ul>
+        {% for answer in questions[question]['answers'] %}
+            <li>
+                <input type="radio"
+                    name="{{ questions[question]['id'] }}"
+                    id="{{ questions[question]['id'] }}"
+                    value="{{ answer }}"
+                    required
+                    >
+                </input>
+                <label for="{{ questions[question]['id'] }}">{{ answer }}</label>
+            </li>
+        {% endfor %}
+        </ul>
+    </p>
+</fieldset>
+
+<input type="submit" value="Finish Quiz" />
+
+{% endfor %}
+</form>
