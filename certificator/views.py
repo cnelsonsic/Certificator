@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, render_template
 
 root = Blueprint('root', __name__)
 
@@ -37,17 +37,33 @@ def do_serve_favicon():
                                favicon)
 
 quiz = Blueprint('quiz', __name__)
+
 @quiz.route('/quiz/<quizname>')
 def do_quiz(quizname):
-    # Populate the page with questions and answers, and a button to submit it.
-    questions = {"What is tha airspeed veolicty of an unladen swallow?": dict(answers=["44mph", "88mph", "24mph", "32mph"], id='q1')}
-    params = dict(quiz_name=quizname, questions=questions)
+    with open('data/'+quizname) as f:
+        quiz_data = f.readlines()
 
-    return render_template('quiz.html', quiz_name=quizname, questions=questions)
+    params = dict(quiz_id=quizname)
+    questions = dict()
+    current_question = None
+    for line in quiz_data:
+        if line.startswith("Title:"):
+            params['quiz_name'] = line.replace("Title:", "").strip()
+        elif line.startswith("Description:"):
+            params['description'] = line.replace("Description:", "").strip()
+        elif line.startswith("Q:"):
+            current_question = line.replace("Q:", "").strip()
+            questions[current_question] = dict()
+            questions[current_question]['answers'] = list()
+            questions[current_question]['id'] = len(questions)
 
-@quiz.route('/quiz/<quizname>/check')
-def do_check(quizname, methods=['POST']):
-    # answers = request.form.get('_method', '').upper()
+        elif line.startswith("A:") or line.startswith("A*:"):
+            answer = line.replace("A:", "").replace("A*:", "").strip()
+            questions[current_question]['answers'].append(answer)
 
-    return render_template('check.html', params=params, alerts=alerts)
+    return render_template('quiz.html', questions=questions, **params)
 
+@quiz.route('/check/', methods=['POST'])
+def do_check():
+
+    return render_template('check.html')

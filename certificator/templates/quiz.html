@@ -1,6 +1,7 @@
 <h2>{{ quiz_name }}</h2>
 
-<form>
+<form action="/check/" method="post" enctype="multipart/form-data">
+<input type="hidden" value={{ quiz_id }} />
 {% for question in questions %}
 <fieldset>
         <legend>
@@ -24,7 +25,8 @@
     </p>
 </fieldset>
 
+{% endfor %}
+
 <input type="submit" value="Finish Quiz" />
 
-{% endfor %}
 </form>
