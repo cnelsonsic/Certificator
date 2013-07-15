@@ -1,1 +1,15 @@
-HI THERE CHECKIN YOUR ANSWERS...
+<h2>{{ quiz_name }} Quiz Results</h2>
+
+<ol>
+{% for question in questions %}
+    <li>{{ question }}:
+    {% if results[questions[question]['id']] == True %}
+        Correct
+    {% else %}
+        Incorrect
+    {% endif %}
+    </li>
+{% endfor %}
+</ol>
+
+<h3>{{ (percentage*100)|round|int }}% Correct</h3>

@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 root = Blueprint('root', __name__)
 
@@ -38,13 +38,12 @@ def do_serve_favicon():
 
 quiz = Blueprint('quiz', __name__)
 
-@quiz.route('/quiz/<quizname>')
-def do_quiz(quizname):
+def parse_quiz(quizname):
     with open('data/'+quizname) as f:
         quiz_data = f.readlines()
 
-    params = dict(quiz_id=quizname)
     questions = dict()
+    params = dict(quiz_id=quizname)
     current_question = None
     for line in quiz_data:
         if line.startswith("Title:"):
@@ -60,10 +59,33 @@ def do_quiz(quizname):
         elif line.startswith("A:") or line.startswith("A*:"):
             answer = line.replace("A:", "").replace("A*:", "").strip()
             questions[current_question]['answers'].append(answer)
+            if line.startswith("A*:"):
+                questions[current_question]['correct'] = answer
 
-    return render_template('quiz.html', questions=questions, **params)
+    return questions, params
+
+
+@quiz.route('/quiz/<quizname>')
+def do_quiz(quizname):
+    questions, addtl = parse_quiz(quizname)
+    return render_template('quiz.html', questions=questions, **addtl)
 
 @quiz.route('/check/', methods=['POST'])
 def do_check():
+    questions, addtl = parse_quiz(request.form['quiz_id'])
 
-    return render_template('check.html')
+    results = dict()
+    for idnum, question in enumerate(questions):
+        their_answer = request.form[str(idnum + 1)]
+        right_answer = questions[question]['correct']
+        if their_answer == right_answer:
+            results[idnum + 1] = True
+        else:
+            results[idnum + 1] = False
+
+    percentage = (float(len([i for i in results if results[i] is True])) / float(len(results)))
+
+    return render_template('check.html', results=results,
+                                         questions=questions,
+                                         quiz_name=addtl['quiz_name'],
+                                         percentage=percentage)
