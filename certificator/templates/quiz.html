@@ -13,12 +13,12 @@
             <li>
                 <input type="radio"
                     name="{{ questions[question]['id'] }}"
-                    id="{{ questions[question]['id'] }}"
+                    id="{{ answer }}"
                     value="{{ answer }}"
                     required
                     >
                 </input>
-                <label for="{{ questions[question]['id'] }}">{{ answer }}</label>
+                <label for="{{ answer }}">{{ answer }}</label>
             </li>
         {% endfor %}
         </ul>

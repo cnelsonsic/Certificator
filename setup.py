@@ -20,11 +20,14 @@ setup(
         'Flask==0.9',
         'Flask-SQLAlchemy==0.16',
         'Flask-Script==0.5.3',
+        'Flask-Login==0.2.5',
+        'Flask-BrowserID==0.0.1',
         'Jinja2==2.6',
         'SQLAlchemy==0.8.1',
         'Werkzeug==0.8.3',
         'twill==0.9',
         'wsgiref==0.1.2',
+        'requests==1.2.3',
         ],
     entry_points={
         'console_scripts': [

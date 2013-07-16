@@ -31,3 +31,9 @@ def create_tables(app):
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     db.metadata.create_all(engine)
     return engine
+
+def get_user_by_id(userid):
+    pass
+
+def get_user(browserid_response):
+    pass

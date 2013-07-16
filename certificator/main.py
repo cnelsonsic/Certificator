@@ -16,11 +16,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Flask
+from flask.ext.login import LoginManager
+from flask.ext.browserid import BrowserID
+
+from db import get_user_by_id # finds a user by their id
+from db import get_user # finds a user based on BrowserID response
+
 from .models import *
 
 def create_app(config_filename=None):
     app = Flask(__name__)
     app.config.from_pyfile(config_filename or 'config.py')
+
+    login_manager = LoginManager()
+    login_manager.user_loader(get_user_by_id)
+    login_manager.init_app(app)
+
+    browser_id = BrowserID()
+    browser_id.user_loader(get_user)
+    browser_id.init_app(app)
 
     from .db import db
     db.init_app(app)
