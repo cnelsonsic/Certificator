@@ -33,7 +33,17 @@ def create_tables(app):
     return engine
 
 def get_user_by_id(userid):
-    pass
+    from .models import User
+    return User.query.filter_by(id=userid).first()
 
 def get_user(browserid_response):
-    pass
+    from .models import User
+    if browserid_response.get('status') == "okay":
+        email = browserid_response.get('email')
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            user = User(email=email)
+            db.session.add(user)
+            db.session.commit()
+
+        return user
