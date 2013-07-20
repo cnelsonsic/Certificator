@@ -16,6 +16,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flask import Blueprint, render_template, request, abort, redirect, session
+from flask.ext.login import login_required
 
 root = Blueprint('root', __name__)
 
@@ -98,13 +99,16 @@ def parse_quiz(quizname):
 
 
 @quiz.route('/quiz/<quizname>')
+@login_required
 def do_quiz(quizname):
     questions, addtl = parse_quiz(quizname)
     return render_template('quiz.html', questions=questions, **addtl)
 
 @quiz.route('/check/', methods=['POST'])
+@login_required
 def do_check():
-    questions, addtl = parse_quiz(request.form['quiz_id'])
+    quiz_id = request.form['quiz_id']
+    questions, addtl = parse_quiz(quiz_id)
 
     results = dict()
     for idnum, question in enumerate(questions):
@@ -116,6 +120,14 @@ def do_check():
             results[idnum + 1] = False
 
     percentage = (float(len([i for i in results if results[i] is True])) / float(len(results)))
+
+    from .db import db, get_user_by_id
+    from .models import Result
+    result = Result(user=get_user_by_id(session["user_id"]),
+                    testname=quiz_id,
+                    percentage=percentage)
+    db.session.add(result)
+    db.session.commit()
 
     return render_template('check.html', results=results,
                                          questions=questions,
