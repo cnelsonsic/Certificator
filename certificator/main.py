@@ -42,9 +42,10 @@ def create_app(config_filename=None):
 
     db.create_all()
 
-    from .views import root, quiz
+    from .views import root, quiz, dashboard
     app.register_blueprint(root)
     app.register_blueprint(quiz)
+    app.register_blueprint(dashboard)
 
     return app
 

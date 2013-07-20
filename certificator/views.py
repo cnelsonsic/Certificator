@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, render_template, request, abort, redirect
+from flask import Blueprint, render_template, request, abort, redirect, session
 
 root = Blueprint('root', __name__)
 
@@ -38,14 +38,32 @@ def do_serve_favicon():
 
 @root.route('/')
 def do_index():
-    # If logged in, redirect to dashboard
-    # If not logged in, redirect to onboarding
-    return redirect("/signup")
+    if session.get('user_id', False):
+        # If logged in, redirect to dashboard
+        return redirect("/list")
+    else:
+        # If not logged in, redirect to onboarding
+        return redirect("/login")
 
 
-@root.route('/signup')
-def do_signup():
-    return render_template('signup.html')
+@root.route('/login')
+def do_login():
+    return render_template('login.html')
+
+dashboard = Blueprint('dashboard', __name__)
+
+@dashboard.route('/list')
+def do_list():
+    import os
+    quizzes = {}
+    for test in os.listdir('data'):
+        print test
+        questions, params = parse_quiz(test)
+        print questions, params
+        quizzes[test] = params
+        quizzes[test]['num_questions'] = len(questions)
+
+    return render_template('list.html', quizzes=quizzes)
 
 quiz = Blueprint('quiz', __name__)
 

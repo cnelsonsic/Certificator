@@ -1,0 +1,7 @@
+
+<dl>
+{% for quizname, quiz in quizzes.iteritems() %}
+    <dt><a href="/quiz/{{ quizname }}">{{ quiz['quiz_name'] }}</a> ({{ quiz['num_questions'] }} questions)</dt>
+    <dd>{{ quiz['description'] }}</a></dd>
+{% endfor %}
+</dl>
