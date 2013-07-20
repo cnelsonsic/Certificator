@@ -21,8 +21,8 @@ setup(
         'Flask-Login==0.2.5',
         'Flask-SQLAlchemy==0.16',
         'Flask-Script==0.5.3',
-        'Flask-BrowserId==0.0.1',
-        'Jinja2==2.6',
+        'Flask-BrowserId==0.0.2',
+        'Jinja2==2.7',
         'MarkupSafe==0.18',
         'SQLAlchemy==0.8.1',
         'Werkzeug==0.8.3',
@@ -31,6 +31,9 @@ setup(
         'requests==1.2.3',
         'twill==0.9',
         'wsgiref==0.1.2',
+        ],
+    dependency_links=[
+        'http://github.com/cnelsonsic/flask-browserid/tarball/fix_setup_py#egg=Flask-BrowserId-0.0.2',
         ],
     entry_points={
         'console_scripts': [
