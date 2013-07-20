@@ -54,6 +54,7 @@ def do_login():
 dashboard = Blueprint('dashboard', __name__)
 
 @dashboard.route('/list')
+@login_required
 def do_list():
     import os
     quizzes = {}
@@ -64,7 +65,24 @@ def do_list():
         quizzes[test] = params
         quizzes[test]['num_questions'] = len(questions)
 
-    return render_template('list.html', quizzes=quizzes)
+    from .db import db
+    from .models import Result
+    results = Result.query.filter_by(user=session["user_id"])\
+                          .order_by(Result.percentage.asc())\
+                          .all()
+    test_results = {}
+    for result in results:
+        try:
+            # If this is higher than anything we've seen before, store it.
+            if result.percentage > test_results[result.testname]:
+                test_results[result.testname] = result.percentage
+        except KeyError:
+            pass
+        test_results[result.testname] = result
+
+    # TODO: Show what class percentile they achieved
+
+    return render_template('list.html', quizzes=quizzes, results=test_results)
 
 quiz = Blueprint('quiz', __name__)
 
