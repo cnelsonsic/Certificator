@@ -1,0 +1,49 @@
+body {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3em;
+    line-height: 1.5em;
+}
+
+h2 {
+    font-size: 2em;
+    line-height: 1.5em;
+}
+
+h3 {
+    font-size: 1.5em;
+    line-height: 1.75em;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+#border {
+    outline: green dotted thick;
+    height: 8.5in;
+    width: 11in;
+}
+
+#student {
+    font-size: 1.75em;
+    line-height: 1.5em;
+    display: block;
+}
+
+#course {
+    font-size: 1.5em;
+    line-height: 1.5em;
+    display: block;
+}
+
+.signaturebox {
+    float: left;
+    margin-top: 3em;
+}
+.signaturename {
+    text-align: center;
+    border-top: 0.1em solid black;
+}

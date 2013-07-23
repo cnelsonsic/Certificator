@@ -151,3 +151,16 @@ def do_check():
                                          questions=questions,
                                          quiz_name=addtl['quiz_name'],
                                          percentage=percentage)
+
+certificate = Blueprint('certificate', __name__)
+
+@certificate.route('/certificate/<string:testname>')
+def do_certificate(testname):
+    return render_template('certificate.html', cert_name="cert_name",
+                                               course_name="course_name",
+                                               student_name="student_name",
+                                               site_name="site_name",
+                                               sub_site_name="sub_site_name",
+                                               verbose_date="verbose_date",
+                                               important_people={"John T Johnson": "Headmaster",
+                                                                 "Susan Q Winklebottom": "Directress of Student Affairs"})

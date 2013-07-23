@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ cert_name }}: {{course_name}} for {{ student_name }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='certificate.css') }}"/>
+
+    </head>
+    <body>
+        <div id='border'>
+            <h1>{{ cert_name }}</h1>
+            <h2>{{ site_name }}</h2>
+            <h3>{{ sub_site_name }}</h3>
+            <p>
+                Hereby certifies that
+
+                <span id="student">{{ student_name }}</span>
+
+                has satisfactorily completed a course of study in
+
+                <span id="course">{{ course_name }}</span>
+
+                this {{ verbose_date }}.
+            </p>
+
+            <p>
+                {% for person, title in important_people.iteritems() %}
+                <div class="signaturebox" style="width: {{ 100 / (important_people|count)}}%;">
+                        <span class="signaturename">{{ person }}, {{ title }}</span>
+                </div>
+                {% endfor %}
+            </p>
+        </div>
+    </body>
+</html>
