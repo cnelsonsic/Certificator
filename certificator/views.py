@@ -156,11 +156,12 @@ certificate = Blueprint('certificate', __name__)
 
 @certificate.route('/certificate/<string:testname>')
 def do_certificate(testname):
-    return render_template('certificate.html', cert_name="cert_name",
-                                               course_name="course_name",
-                                               student_name="student_name",
-                                               site_name="site_name",
-                                               sub_site_name="sub_site_name",
-                                               verbose_date="verbose_date",
+    # If testname ends with ".png" or ".pdf", use weasyprint and generate it.
+    return render_template('certificate.html', cert_name="Certificate of Completion",
+                                               course_name="Monty Python Studies",
+                                               student_name="Charles Nelson",
+                                               site_name="Monty Python Academy",
+                                               sub_site_name="Online Campus",
+                                               verbose_date="Thirtieth day of June, Two-Thousand and Thirteen",
                                                important_people={"John T Johnson": "Headmaster",
                                                                  "Susan Q Winklebottom": "Directress of Student Affairs"})

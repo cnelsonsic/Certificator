@@ -31,6 +31,17 @@ setup(
         'requests==1.2.3',
         'twill==0.9',
         'wsgiref==0.1.2',
+
+        # weasyprint:
+        'WeasyPrint==0.19.2',
+        'CairoSVG==0.5',
+        'Pyphen==0.7',
+        'cairocffi==0.5.1',
+        'cffi==0.6',
+        'cssselect==0.8',
+        'pycparser==2.09.1',
+        'lxml==3.2.1',
+        'tinycss==0.3',
         ],
     dependency_links=[
         'http://github.com/cnelsonsic/flask-browserid/tarball/fix_setup_py#egg=Flask-BrowserId-0.0.2',

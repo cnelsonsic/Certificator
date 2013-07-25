@@ -1,40 +1,57 @@
+
+/* Fonts */
+.blackletter {
+    font-family: "Agincourt Std", "UnifrakturMaguntia";
+}
+
+.script {
+     font-family: "Bickham Script Pro", 'Quintessential';
+}
+
+.bodytext {
+    font-family: "Adobe Caslon Pro", "Crimson Text", "Crimson";
+}
+
+/* Sizes */
+.largerest {
+    font-size: 6em;
+}
+.largest {
+    font-size: 4em;
+}
+.larger {
+    font-size: 3em;
+}
+.large {
+    font-size: 2.5em;
+}
+.largish {
+    font-size: 1.5em;
+}
+
+@page {
+    size: 11in 8.5in;
+    margin: 2cm;
+}
+
+
 body {
     text-align: center;
+    -weasy-hyphens: manual;
 }
 
-h1 {
-    font-size: 3em;
+h1, h2, h3, p {
     line-height: 1.5em;
+    -weasy-bookmark-level: none;
 }
 
-h2 {
-    font-size: 2em;
-    line-height: 1.5em;
-}
-
-h3 {
-    font-size: 1.5em;
-    line-height: 1.75em;
-}
-
-p {
-    line-height: 1.5em;
-}
-
-#border {
+/*#border {
     outline: green dotted thick;
     height: 8.5in;
     width: 11in;
-}
+}*/
 
-#student {
-    font-size: 1.75em;
-    line-height: 1.5em;
-    display: block;
-}
-
-#course {
-    font-size: 1.5em;
+.ownline {
     line-height: 1.5em;
     display: block;
 }
@@ -44,6 +61,7 @@ p {
     margin-top: 3em;
 }
 .signaturename {
+    padding-top: 0.2em;
     text-align: center;
-    border-top: 0.1em solid black;
+    border-top: thin solid black;
 }
