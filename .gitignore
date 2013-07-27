@@ -37,3 +37,5 @@ cover
 
 .env
 *.db
+
+stripe*.sh

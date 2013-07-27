@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2>Here's your certificate!</h2>
+    <p>
+        Want it?
+        Well, we have to cover costs somehow.
+    </p>
+
+  <form action="/charge" method="post">
+    <article>
+      <label>
+          <span>Amount is {{ "$%.2f"|format(amount/100.0) }}</span>
+      </label>
+    </article>
+
+    <script src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="{{ description }}"
+            data-amount="{{ amount }}"></script>
+  </form>
+
+</div>
+
+{% endblock %}

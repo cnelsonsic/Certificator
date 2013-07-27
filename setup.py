@@ -32,6 +32,7 @@ setup(
         'requests==1.2.3',
         'twill==0.9',
         'wsgiref==0.1.2',
+        'stripe==1.9.2',
 
         # weasyprint:
         'WeasyPrint==0.19.2',

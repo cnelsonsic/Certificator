@@ -18,6 +18,13 @@
 from flask import Blueprint, render_template, request, abort, redirect, session
 from flask.ext.login import login_required
 
+import os
+import stripe
+stripe_keys = {'secret_key': os.environ['SECRET_KEY'],
+               'publishable_key': os.environ['PUBLISHABLE_KEY']
+              }
+stripe.api_key = stripe_keys['secret_key']
+
 root = Blueprint('root', __name__)
 
 @root.route('/favicon.ico')
@@ -160,8 +167,10 @@ certificate = Blueprint('certificate', __name__)
 
 @certificate.route('/certificate/<string:testname>')
 def do_certificate(testname):
-    # If testname ends with ".png" or ".pdf", use weasyprint and generate it.
-    return render_template('certificate.html', cert_name="Certificate of Completion",
+    # Insert row into certificates with relevant info
+
+    # Generate certificate.
+    cert = render_template('certificate.html', cert_name="Certificate of Completion",
                                                course_name="Monty Python Studies",
                                                student_name="Charles Nelson",
                                                site_name="Monty Python Academy",
@@ -169,3 +178,42 @@ def do_certificate(testname):
                                                verbose_date="Thirtieth day of June, Two-Thousand and Thirteen",
                                                important_people={"John T Johnson": "Headmaster",
                                                                  "Susan Q Winklebottom": "Directress of Student Affairs"})
+                                               # TODO: Add certificates row id to certificate via qrcode and url
+
+    # If not purchased yet, redirect to purchase form.
+    return render_template('purchase.html', key=stripe_keys['publishable_key'],
+                                            desc="Certificate of Completion: Monty Python Studies",
+                                            amount=500,
+                                            teaser_img="/generated/asdoifjawoiejfasodifja.png")
+
+    # If purchased, redirect to page for PDF and high-res PNG download.
+
+@certificate.route('/charge', methods=['POST'])
+@login_required
+def charge():
+    from .db import db, get_user_by_id
+
+    # Amount in cents
+    amount = 500
+
+    try:
+        customer = stripe.Customer.create(
+            email=get_user_by_id(session["user_id"]).email,
+            card=request.form['stripeToken']
+        )
+    except (stripe.InvalidRequestError):
+        if request.referrer:
+            return redirect(request.referrer)
+        else:
+            return redirect("/")
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description='Certificate of Completion',
+    )
+
+    # TODO: Set certificate status to purchased.
+
+    return render_template('charge.html', amount=amount)
