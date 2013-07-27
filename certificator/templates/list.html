@@ -1,24 +1,32 @@
-<h2>Available Quizzes</h2>
-<dl>
-{% for quizname, quiz in quizzes.iteritems() %}
-    <dt><a href="/quiz/{{ quizname }}">{{ quiz['quiz_name'] }}</a> ({{ quiz['num_questions'] }} questions)</dt>
-    <dd>{{ quiz['description'] }}</a></dd>
-{% endfor %}
-</dl>
+{% extends "base.html" %}
 
-<h2>Quiz Results</h2>
-<ul>
-    {% for testid, result in results.iteritems() %}
-    <li>
-        <a
-        {% if result.percentage >= 1.0 %}
-            href="/certificate/{{ result.testname }}">
-        {% else %}
-            href="/quiz/{{ result.testname }}">
-        {% endif %}
+{% block content %}
 
-        {{ quizzes[result.testname]['quiz_name'] }}</a>:
-        {{ (result.percentage*100)|round|int }}%
-    </li>
+<div class="container">
+    <h2>Available Quizzes</h2>
+    <dl>
+    {% for quizname, quiz in quizzes.iteritems() %}
+        <dt><a href="/quiz/{{ quizname }}">{{ quiz['quiz_name'] }}</a> ({{ quiz['num_questions'] }} questions)</dt>
+        <dd>{{ quiz['description'] }}</a></dd>
     {% endfor %}
-</ul>
+    </dl>
+
+    <h2>Quiz Results</h2>
+    <ul>
+        {% for testid, result in results.iteritems() %}
+        <li>
+            <a
+            {% if result.percentage >= 1.0 %}
+                href="/certificate/{{ result.testname }}">
+            {% else %}
+                href="/quiz/{{ result.testname }}">
+            {% endif %}
+
+            {{ quizzes[result.testname]['quiz_name'] }}</a>:
+            {{ (result.percentage*100)|round|int }}%
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

@@ -39,17 +39,16 @@ def do_serve_favicon():
 
 @root.route('/')
 def do_index():
+    return redirect("/greetings")
+
+@root.route('/greetings')
+def do_onboarding():
     if session.get('user_id', False):
         # If logged in, redirect to dashboard
         return redirect("/list")
     else:
         # If not logged in, redirect to onboarding
-        return redirect("/login")
-
-
-@root.route('/login')
-def do_login():
-    return render_template('login.html')
+        return render_template('onboarding.html')
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -83,6 +82,11 @@ def do_list():
     # TODO: Show what class percentile they achieved
 
     return render_template('list.html', quizzes=quizzes, results=test_results)
+
+@dashboard.errorhandler(401)
+@dashboard.errorhandler(403)
+def gohome(e):
+    return redirect("/")
 
 quiz = Blueprint('quiz', __name__)
 

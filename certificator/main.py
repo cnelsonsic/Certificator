@@ -18,6 +18,7 @@
 from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.browserid import BrowserID
+from flask.ext.bootstrap import Bootstrap
 
 from db import get_user_by_id # finds a user by their id
 from db import get_user # finds a user based on BrowserID response
@@ -35,6 +36,8 @@ def create_app(config_filename=None):
     browser_id = BrowserID()
     browser_id.user_loader(get_user)
     browser_id.init_app(app)
+
+    Bootstrap(app)
 
     from .db import db
     db.init_app(app)

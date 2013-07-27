@@ -22,6 +22,7 @@ setup(
         'Flask-SQLAlchemy==0.16',
         'Flask-Script==0.5.3',
         'Flask-BrowserId==0.0.2',
+        'Flask-Bootstrap==2.3.2.1',
         'Jinja2==2.7',
         'MarkupSafe==0.18',
         'SQLAlchemy==0.8.1',

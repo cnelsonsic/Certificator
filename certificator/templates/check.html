@@ -1,15 +1,23 @@
-<h2>{{ quiz_name }} Quiz Results</h2>
+{% extends "base.html" %}
 
-<ol>
-{% for question in questions %}
-    <li>{{ question }}:
-    {% if results[questions[question]['id']] == True %}
-        Correct
-    {% else %}
-        Incorrect
-    {% endif %}
-    </li>
-{% endfor %}
-</ol>
+{% block body %}
 
-<h3>{{ (percentage*100)|round|int }}% Correct</h3>
+<div class="container">
+    <h2>{{ quiz_name }} Quiz Results</h2>
+
+    <ol>
+    {% for question in questions %}
+        <li>{{ question }}:
+        {% if results[questions[question]['id']] == True %}
+            Correct
+        {% else %}
+            Incorrect
+        {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+
+    <h3>{{ (percentage*100)|round|int }}% Correct</h3>
+</div>
+
+{% endblock %}
