@@ -20,8 +20,7 @@ from flask.ext.login import LoginManager
 from flask.ext.browserid import BrowserID
 from flask.ext.bootstrap import Bootstrap
 
-from db import get_user_by_id # finds a user by their id
-from db import get_user # finds a user based on BrowserID response
+import db
 
 from .models import *
 
@@ -29,6 +28,7 @@ def create_app(config_filename=None):
     app = Flask(__name__)
     app.config.from_pyfile(config_filename or 'config.py')
 
+    from .db import get_user_by_id, get_user
     login_manager = LoginManager()
     login_manager.user_loader(get_user_by_id)
     login_manager.init_app(app)
@@ -39,11 +39,12 @@ def create_app(config_filename=None):
 
     Bootstrap(app)
 
-    from .db import db
-    db.init_app(app)
-    db.app = app
+    from .db import db as sqla
+    from .db import create_tables
+    sqla.init_app(app)
+    sqla.app = app
 
-    db.create_all()
+    sqla.create_all()
 
     from .views import root, quiz, dashboard, certificate
     app.register_blueprint(root)

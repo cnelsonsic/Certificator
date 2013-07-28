@@ -31,10 +31,23 @@
     </div>
 </div>
 
-</span>
-</a>
+<div class="container">
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert fade in">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        {{ message|safe }}
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 {% block content %}{% endblock %}
+
+</div>
+
 {% endblock body_content %}
 
 {% block bootstrap_js_bottom %}

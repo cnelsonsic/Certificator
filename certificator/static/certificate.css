@@ -28,6 +28,9 @@
 .largish {
     font-size: 1.5em;
 }
+.tiny {
+    font-size: 0.75em;
+}
 
 @page {
     size: 11in 8.5in;

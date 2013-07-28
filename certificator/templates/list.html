@@ -2,7 +2,6 @@
 
 {% block content %}
 
-<div class="container">
     <h2>Available Quizzes</h2>
     <dl>
     {% for quizname, quiz in quizzes.iteritems() %}
@@ -11,13 +10,14 @@
     {% endfor %}
     </dl>
 
+    {% if results %}
     <h2>Quiz Results</h2>
     <ul>
         {% for testid, result in results.iteritems() %}
         <li>
             <a
             {% if result.percentage >= 1.0 %}
-                href="/certificate/{{ result.testname }}">
+                href="/certificate/{{ result.id }}">
             {% else %}
                 href="/quiz/{{ result.testname }}">
             {% endif %}
@@ -27,6 +27,6 @@
         </li>
         {% endfor %}
     </ul>
-</div>
+    {% endif %}
 
 {% endblock %}

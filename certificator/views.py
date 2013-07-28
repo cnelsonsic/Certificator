@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, render_template, request, abort, redirect, session
+from flask import Blueprint, render_template, request, abort, redirect, session, flash
 from flask.ext.login import login_required
 
 import os
@@ -88,6 +88,11 @@ def do_list():
 
     # TODO: Show what class percentile they achieved
 
+    # Pester them about setting their full name.
+    from .db import get_user_by_id
+    if not get_user_by_id(session["user_id"]).full_name:
+        flash('You should <a href="/account">set your full name.</a> We print it on your Certificates!', 'info')
+
     return render_template('list.html', quizzes=quizzes, results=test_results)
 
 @dashboard.errorhandler(401)
@@ -158,6 +163,7 @@ def do_check():
     db.session.add(result)
     db.session.commit()
 
+    # TODO: Add a link back to the dashboard.
     return render_template('check.html', results=results,
                                          questions=questions,
                                          quiz_name=addtl['quiz_name'],
@@ -165,33 +171,58 @@ def do_check():
 
 certificate = Blueprint('certificate', __name__)
 
-@certificate.route('/certificate/<string:testname>')
-def do_certificate(testname):
-    # Insert row into certificates with relevant info
+@certificate.route('/certificate/<int:resultid>')
+@login_required
+def do_certificate(resultid):
+    from .db import db, get_user_by_id
+    from .models import Result, Certificate
+
+    result = Result.query.filter_by(id=resultid).first()
+
+    user = get_user_by_id(session['user_id'])
+    if result.user != user.id:
+        # This user doesn't own this certificate.
+        return redirect("/")
+
+    if not result.certificate:
+        # If cert doesn't exist, insert row into certificates with relevant info
+        cert = Certificate(result=result)
+        db.session.add(cert)
+        db.session.commit()
+    else:
+        cert = result.certificate
 
     # Generate certificate.
-    cert = render_template('certificate.html', cert_name="Certificate of Completion",
-                                               course_name="Monty Python Studies",
-                                               student_name="Charles Nelson",
-                                               site_name="Monty Python Academy",
-                                               sub_site_name="Online Campus",
-                                               verbose_date="Thirtieth day of June, Two-Thousand and Thirteen",
-                                               important_people={"John T Johnson": "Headmaster",
-                                                                 "Susan Q Winklebottom": "Directress of Student Affairs"})
-                                               # TODO: Add certificates row id to certificate via qrcode and url
+    cert_html = render_template('certificate.html', cert_name="Certificate of Completion",
+                                                    course_name="Monty Python Studies",
+                                                    student_name=user.full_name or user.email,
+                                                    site_name="Monty Python Academy",
+                                                    sub_site_name="Online Campus",
+                                                    verbose_date="Thirtieth day of June, Two-Thousand and Thirteen",
+                                                    important_people={"John T Johnson": "Headmaster",
+                                                                        "Susan Q Winklebottom": "Directress of Student Affairs"},
+                                                    cert_id=cert.gid)
 
-    # If not purchased yet, redirect to purchase form.
-    return render_template('purchase.html', key=stripe_keys['publishable_key'],
-                                            desc="Certificate of Completion: Monty Python Studies",
-                                            amount=500,
-                                            teaser_img="/generated/asdoifjawoiejfasodifja.png")
+    if not cert.purchased:
+        # If not purchased yet, redirect to purchase form.
+        session['cert_id'] = cert.id
+        return render_template('purchase.html', key=stripe_keys['publishable_key'],
+                                                desc="Certificate of Completion: Monty Python Studies",
+                                                amount=500,
+                                                teaser_img="/generated/asdoifjawoiejfasodifja.png")
+    elif cert.purchased:
+        # If purchased, redirect to page for PDF and high-res PNG download.
+        return cert_html
 
-    # If purchased, redirect to page for PDF and high-res PNG download.
 
 @certificate.route('/charge', methods=['POST'])
 @login_required
 def charge():
     from .db import db, get_user_by_id
+    from .models import Certificate
+    if not session.get('cert_id'):
+        flash("Something went wrong. Your card was not charged.")
+        return redirect("/")
 
     # Amount in cents
     amount = 500
@@ -214,6 +245,11 @@ def charge():
         description='Certificate of Completion',
     )
 
-    # TODO: Set certificate status to purchased.
+    # Set certificate status to purchased.
+    cert_id = session['cert_id']
+    cert = Certificate.query.filter_by(id=cert_id).first()
+    cert.purchased = True
+    db.session.add(cert)
+    db.session.commit()
 
-    return render_template('charge.html', amount=amount)
+    return render_template('charge.html', amount=amount, result_id=cert.result_id)
