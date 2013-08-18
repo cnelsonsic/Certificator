@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form class="form form-horizontal" action="/account" method="post" enctype="multipart/form-data">
+    <div class="control-group">
+        <label class="control-label" for="email">E-Mail</label>
+        <div class="controls">
+            <input class="inline" name="email" value="{{ user.email }}" disabled />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="full_name">Full Name</label>
+        <div class="controls">
+            <input class="inline" name="full_name" value="{{ user.full_name if user.full_name else ''}}" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <input class="btn btn-success" type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+
+{% endblock %}

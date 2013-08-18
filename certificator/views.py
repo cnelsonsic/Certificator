@@ -95,6 +95,21 @@ def do_list():
 
     return render_template('list.html', quizzes=quizzes, results=test_results)
 
+@dashboard.route('/account', methods=['GET', 'POST'])
+@login_required
+def do_account():
+    from .db import db, get_user_by_id
+    user = get_user_by_id(session["user_id"])
+    if hasattr(request, 'form'):
+        if 'full_name' in request.form:
+            full_name = request.form['full_name']
+            user.full_name = full_name
+            db.session.commit()
+            flash("Full Name set to {}. Thanks!".format(user.full_name))
+
+    return render_template('account.html', user=user)
+
+
 @dashboard.errorhandler(401)
 @dashboard.errorhandler(403)
 def gohome(e):
