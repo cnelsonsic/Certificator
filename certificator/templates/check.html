@@ -18,6 +18,15 @@
     </ol>
 
     <h3>{{ (percentage*100)|round|int }}% Correct</h3>
+
+    <p>
+        <a
+        {% if percentage >= 1.0 %}
+            href="/certificate/{{ result.id }}">Get your Certificate!</a>
+        {% else %}
+            href="/quiz/{{ result.testname }}">Retry?</a>
+        {% endif %}
+    </p>
 </div>
 
 {% endblock %}

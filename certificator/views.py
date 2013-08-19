@@ -182,7 +182,8 @@ def do_check():
     return render_template('check.html', results=results,
                                          questions=questions,
                                          quiz_name=addtl['quiz_name'],
-                                         percentage=percentage)
+                                         percentage=percentage,
+                                         result=result)
 
 certificate = Blueprint('certificate', __name__)
 
