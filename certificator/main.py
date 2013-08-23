@@ -56,7 +56,7 @@ def create_app(config_filename=None):
 
 def main():
     app = create_app()
-    app.run(port=5012, debug=True)
+    app.run(host='0.0.0.0', port=5012, debug=True)
 
 if __name__ == '__main__':
     main()
