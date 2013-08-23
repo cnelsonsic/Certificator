@@ -105,7 +105,7 @@ def do_account():
             full_name = request.form['full_name']
             user.full_name = full_name
             db.session.commit()
-            flash("Full Name set to {}. Thanks!".format(user.full_name))
+            flash('Full Name set to {}. Thanks! <a href="/">'.format(user.full_name))
 
     return render_template('account.html', user=user)
 

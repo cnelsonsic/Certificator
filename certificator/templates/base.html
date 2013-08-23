@@ -10,22 +10,30 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
             <a class="brand" href="/">Certificator!</a>
+            <!-- <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> -->
+                <!-- <span class="icon-bar"></span> -->
+                <!-- <span class="icon-bar"></span> -->
+                <!-- <span class="icon-bar"></span> -->
+            <!-- </a> -->
+            <ul class="nav">
+                <li class="{{ 'active' if active == 'list' else '' }}">
+                    <a href="/list">Quizzes</a>
+                </li>
+                <li class="{{ 'active' if active == 'account' else '' }}">
+                    <a href="/account">Account Settings</a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                <li>
+                    {% if current_user.is_authenticated() %}
+                        <button class="btn btn-success" id="browserid-logout">Logout</button>
+                        {% else %}
+                        <button class="btn btn-success" id="browserid-login">Login</button>
+                    {% endif %}
+                </li>
+            </ul>
             <div class="nav-collapse collapse">
-                <ul class="nav pull-right">
-                    <li>
-                        {% if current_user.is_authenticated() %}
-                            <button class="btn btn-success" id="browserid-logout">Logout</button>
-                            {% else %}
-                            <button class="btn btn-success" id="browserid-login">Login</button>
-                        {% endif %}
-                    </li>
-                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
