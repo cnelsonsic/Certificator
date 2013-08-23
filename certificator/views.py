@@ -71,20 +71,23 @@ def do_list():
         quizzes[test] = params
         quizzes[test]['num_questions'] = len(questions)
 
-    from .db import db
     from .models import Result
     results = Result.query.filter_by(user=session["user_id"])\
                           .order_by(Result.percentage.asc())\
                           .all()
     test_results = {}
     for result in results:
+        result.fullname = quizzes[result.testname]['quiz_name']
         try:
             # If this is higher than anything we've seen before, store it.
             if result.percentage > test_results[result.testname]:
                 test_results[result.testname] = result.percentage
+            if result.percentage == 1.0:
+                del quizzes[result.testname]
         except KeyError:
             pass
         test_results[result.testname] = result
+
 
     # TODO: Show what class percentile they achieved
 
@@ -150,6 +153,15 @@ def parse_quiz(quizname):
 @quiz.route('/quiz/<quizname>')
 @login_required
 def do_quiz(quizname):
+    from .models import Result
+    already_passed = Result.query.filter_by(user=session["user_id"])\
+                          .filter_by(testname=quizname)\
+                          .filter_by(percentage=1.0)\
+                          .first()
+    if already_passed:
+        # Shouldn't normally get here, but someone might hit an old url.
+        return redirect('/certificate/{}'.format(already_passed.certificate.id))
+
     questions, addtl = parse_quiz(quizname)
     return render_template('quiz.html', questions=questions, **addtl)
 

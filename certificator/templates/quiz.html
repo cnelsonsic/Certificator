@@ -1,8 +1,8 @@
+{% set active = 'list' %}
+
 {% extends "base.html" %}
 
-{% block body %}
-
-<div class="container">
+{% block content %}
 
     <h2>{{ quiz_name }}</h2>
 
@@ -37,7 +37,5 @@
         <input type="submit" value="Finish Quiz" />
 
     </form>
-
-</div>
 
 {% endblock %}
