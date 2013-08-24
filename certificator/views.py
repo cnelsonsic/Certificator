@@ -26,9 +26,6 @@ root = Blueprint('root', __name__)
 
 @root.route('/favicon.ico')
 def do_serve_favicon():
-    import os
-    from flask import send_from_directory, current_app, request
-
     ua = request.headers.get('User-Agent')
     if ua and ("Chrome" in ua or "Opera" in ua):
         # favicon = "triops.svg"
@@ -59,7 +56,6 @@ dashboard = Blueprint('dashboard', __name__)
 @dashboard.route('/list')
 @login_required
 def do_list():
-    import os
     quizzes = {}
     for test in os.listdir('data'):
         print test
