@@ -15,15 +15,12 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import Blueprint, render_template, request, abort, redirect, session, flash
+from flask import Blueprint, render_template, request, abort, redirect, \
+                  session, flash, current_app, send_from_directory
 from flask.ext.login import login_required
 
 import os
 import stripe
-stripe_keys = {'secret_key': os.environ['SECRET_KEY'],
-               'publishable_key': os.environ['PUBLISHABLE_KEY']
-              }
-stripe.api_key = stripe_keys['secret_key']
 
 root = Blueprint('root', __name__)
 
@@ -234,7 +231,7 @@ def do_certificate(resultid):
     if not cert.purchased:
         # If not purchased yet, redirect to purchase form.
         session['cert_id'] = cert.id
-        return render_template('purchase.html', key=stripe_keys['publishable_key'],
+        return render_template('purchase.html', key=current_app.config['STRIPE_PUBLISHABLE_KEY'],
                                                 desc="Certificate of Completion: Monty Python Studies",
                                                 amount=500,
                                                 teaser_img="/generated/asdoifjawoiejfasodifja.png")

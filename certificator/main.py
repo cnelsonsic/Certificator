@@ -15,6 +15,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.browserid import BrowserID
@@ -27,6 +29,9 @@ from .models import *
 def create_app(config_filename=None):
     app = Flask(__name__)
     app.config.from_pyfile(config_filename or 'config.py')
+    if 'CERTIFICATOR_SETTINGS' in os.environ:
+        # Only try to load a config from it if set.
+        app.config.from_envvar('CERTIFICATOR_SETTINGS')
 
     from .db import get_user_by_id, get_user
     login_manager = LoginManager()
@@ -45,6 +50,9 @@ def create_app(config_filename=None):
     sqla.app = app
 
     sqla.create_all()
+
+    import stripe
+    stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
     from .views import root, quiz, dashboard, certificate
     app.register_blueprint(root)
