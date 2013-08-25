@@ -45,7 +45,6 @@ def create_app(config_filename=None):
     Bootstrap(app)
 
     from .db import db as sqla
-    from .db import create_tables
     sqla.init_app(app)
     sqla.app = app
 
