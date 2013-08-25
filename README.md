@@ -7,7 +7,7 @@ Certificates that a person has the skills to pay the bills.
 
 # Running
 ```bash
-$ virtualenv .env
+$ virtualenv .env --no-site-packages
 $ source .env/bin/activate
 (.env) $ ./setup.py develop
 (.env) $ certificator-server &
