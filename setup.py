@@ -15,6 +15,7 @@ setup(
         'nose>=1.2.1',
         'coverage==3.6',
         'Flask-Testing==0.4',
+        'httpretty==0.6.3',
         ],
     install_requires=[
         'Flask==0.10.1',
