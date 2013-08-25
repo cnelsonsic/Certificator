@@ -54,6 +54,15 @@ class CertificatorTestCase(unittest.TestCase):
         rv = self.app.get('/list')
         assert "Available Quizzes" in rv.data
 
+    def test_list_quizzes(self):
+        '''There should be at least one quiz by default.'''
+        self.login()
+
+        # Should be able to see the available quizzes now.
+        rv = self.app.get('/list')
+        assert "Available Quizzes" in rv.data
+        assert '<dt><a href="/quiz/montypython">' in rv.data
+
 
 if __name__ == '__main__':
     unittest.main()
