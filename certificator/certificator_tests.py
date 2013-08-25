@@ -32,7 +32,7 @@ class CertificatorTestCase(unittest.TestCase):
                                body=persona,
                                content_type="application/json")
 
-        rv = self.app.post('/api/login', data=dict(assertion="asdf"))
+        self.app.post('/api/login', data=dict(assertion="asdf"))
 
     def test_not_logged_in_redirect(self):
         '''When a user is not logged in, redirect to the landing page.'''
