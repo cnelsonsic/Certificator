@@ -3,7 +3,6 @@ import unittest
 import tempfile
 import httpretty
 
-import certificator
 from certificator.main import create_app
 
 class CertificatorTestCase(unittest.TestCase):
@@ -20,6 +19,7 @@ class CertificatorTestCase(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(self.application.config['DATABASE'])
 
+    @httpretty.activate
     def login(self):
         # Mock the response from persona.org for success.
         persona = ('{"audience":"http://localhost/",'
@@ -41,7 +41,6 @@ class CertificatorTestCase(unittest.TestCase):
         assert rv.status_code == 302
         assert rv.headers['Location'] == 'http://localhost/greetings'
 
-    @httpretty.activate
     def test_log_in(self):
         '''A user has clicked the login button.'''
 
