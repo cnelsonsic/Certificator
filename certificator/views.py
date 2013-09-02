@@ -218,6 +218,7 @@ def do_certificate(resultid):
         os.makedirs(certpath)
 
     # Generate certificate.
+    # TODO: Template these values.
     cert_html = render_template('certificate.html', cert_name="Certificate of Completion",
                                                     course_name="Monty Python Studies",
                                                     student_name=user.full_name or user.email,

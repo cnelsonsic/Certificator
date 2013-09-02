@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>Download your Certificate!</h2>
+
+    <h4>
+        <a href="{{ certpath + certhash}}.pdf">PDF</a>
+        or
+        <a href="{{ certpath + certhash}}.pdf">High-Res Image</a>
+    </h4>
+
+{% endblock %}
