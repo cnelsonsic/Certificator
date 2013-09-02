@@ -213,6 +213,10 @@ def do_certificate(resultid):
     else:
         cert = result.certificate
 
+    certpath = 'generated/{userid}/{certgid}/'.format(userid=user.id, certgid=cert.gid)
+    if not os.path.exists(certpath):
+        os.makedirs(certpath)
+
     # Generate certificate.
     cert_html = render_template('certificate.html', cert_name="Certificate of Completion",
                                                     course_name="Monty Python Studies",
@@ -224,16 +228,23 @@ def do_certificate(resultid):
                                                                         "Susan Q Winklebottom": "Directress of Student Affairs"},
                                                     cert_id=cert.gid)
 
+    import hashlib
+    certhash = hashlib.sha1(cert_html).hexdigest()
+    if not os.path.exists(certpath+certhash+".html"):
+        with open(certpath+certhash+".html", 'w') as f:
+            f.write(cert_html)
+
     if not cert.purchased:
         # If not purchased yet, redirect to purchase form.
         session['cert_id'] = cert.id
         return render_template('purchase.html', key=current_app.config['STRIPE_PUBLISHABLE_KEY'],
                                                 desc="Certificate of Completion: Monty Python Studies",
                                                 amount=500,
-                                                teaser_img="/generated/asdoifjawoiejfasodifja.png")
+                                                teaser_img=certpath+certhash+"_thumbnail.png")
     elif cert.purchased:
         # If purchased, redirect to page for PDF and high-res PNG download.
-        return cert_html
+        # TODO: May need to add some JS to show that it's working
+        return render_template('download.html', certpath=certpath, certhash=certhash)
 
 
 @certificate.route('/charge', methods=['POST'])

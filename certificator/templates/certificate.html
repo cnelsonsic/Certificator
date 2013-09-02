@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>{{ cert_name }}: {{course_name}} for {{ student_name }}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='certificate.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='reset.css', _external=True) }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='certificate.css', _external=True) }}"/>
         <link href='http://fonts.googleapis.com/css?family=Quintessential|Pinyon+Script|Crimson+Text:600|UnifrakturMaguntia|Aguafina+Script' rel='stylesheet' type='text/css'>
 
     </head>

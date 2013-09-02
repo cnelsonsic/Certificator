@@ -47,6 +47,7 @@ setup(
         'pycparser==2.09.1',
         'lxml==3.2.1',
         'tinycss==0.3',
+        'pyinotify==0.9.4',
         ],
     dependency_links=[
         'http://github.com/cnelsonsic/flask-browserid/tarball/fix_setup_py#egg=Flask-BrowserId-0.0.2',
@@ -54,6 +55,7 @@ setup(
     entry_points={
         'console_scripts': [
             'certificator-server = certificator.main:main',
+            'certificator-renderer = certificator.renderer:main',
             ],
         }
 )
