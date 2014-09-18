@@ -1,10 +1,30 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='onboarding.css', _external=True) }}"/>
+{% endblock %}
+
 {% block content %}
 
-<div class="hero-unit">
-    <h1>Get Certified!</h1>
-    <p>Prove you've got what it takes.</p>
+<div class="hero-unit text-center">
+    <h1 class="smaller">Show the world that you really know your stuff.</h1>
+
+    <p>
+        Take a comprehensive exam for <strong>free</strong>,
+        as many times as you like.
+    </p>
+    <p>
+        When you've mastered the subject,
+        a printable certificate is
+        <strong>just $5</strong>.
+    </p>
+
+    {% if current_user.is_authenticated() %}
+        <a role="button" class="center-block btn btn-success btn-large" href="{{ url_for('do_list') }}">Get Started</button>
+    {% else %}
+        <button class="center-block btn btn-success btn-large" id="browserid-login">Get Started</button>
+    {% endif %}
 </div>
 
 {% endblock %}
